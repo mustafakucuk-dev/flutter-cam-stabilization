@@ -1,6 +1,7 @@
-## NEXT
+## 2.8.0
 
 * Updates minimum supported SDK version to Flutter 3.16/Dart 3.2.
+* Adds support for video stabilization.
 
 ## 2.7.4
 
