@@ -1,3 +1,7 @@
+## 0.7.0
+
+* Adds video stabilization.
+
 ## 0.6.5+6
 
 * Updates Guava version to 33.2.1.

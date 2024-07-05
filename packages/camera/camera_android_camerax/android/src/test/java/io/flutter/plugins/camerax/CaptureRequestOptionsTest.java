@@ -55,6 +55,7 @@ public class CaptureRequestOptionsTest {
         new HashMap<Long, Object>() {
           {
             put(0L, false);
+            put(1L, 1);
           }
         };
 
@@ -68,9 +69,15 @@ public class CaptureRequestOptionsTest {
       switch (supportedType) {
         case CONTROL_AE_LOCK:
           verify(mockBuilder)
-              .setCaptureRequestOption(
-                  eq(CaptureRequest.CONTROL_AE_LOCK), eq((Boolean) testValueForSupportedType));
+                  .setCaptureRequestOption(
+                          eq(CaptureRequest.CONTROL_AE_LOCK), eq((Boolean) testValueForSupportedType));
           break;
+        case CONTROL_VIDEO_STABILIZATION_MODE:
+          verify(mockBuilder)
+                  .setCaptureRequestOption(
+                          eq(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE), eq((Integer) testValueForSupportedType));
+          break;
+
         default:
           throw new IllegalArgumentException(
               "The capture request key is not currently supported by the plugin.");

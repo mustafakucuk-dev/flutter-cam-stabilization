@@ -49,6 +49,13 @@ class CameraInfo extends JavaObject {
   /// Gets the live zoom state of the camera.
   Future<LiveData<ZoomState>> getZoomState() =>
       _api.getZoomStateFromInstance(this);
+
+  // /// Returns a value indicating whether the given video
+  // /// stabilization mode is supported for the selected camera.
+  // Future<bool?> isVideoStabilizationModeSupported(
+  //     VideoStabilizationMode mode) async {
+  //   return _api.isVideoStabilizationModeSupportedFromInstance(this, mode);
+  // }
 }
 
 /// Host API implementation of [CameraInfo].
@@ -100,6 +107,17 @@ class _CameraInfoHostApiImpl extends CameraInfoHostApi {
     return instanceManager.getInstanceWithWeakReference<LiveData<ZoomState>>(
         zoomStateIdentifier)!;
   }
+
+  // /// Returns a value indicating whether the given video
+  // /// stabilization mode is supported for [CameraInfo] instance.
+  // Future<bool?> isVideoStabilizationModeSupportedFromInstance(
+  //     CameraInfo instance, VideoStabilizationMode mode) async {
+  //   final int identifier = instanceManager.getIdentifier(instance)!;
+
+  //   final bool? result =
+  //       await isVideoStabilizationModeSupported(identifier, mode.index);
+  //   return result;
+  // }
 }
 
 /// Flutter API implementation of [CameraInfo].

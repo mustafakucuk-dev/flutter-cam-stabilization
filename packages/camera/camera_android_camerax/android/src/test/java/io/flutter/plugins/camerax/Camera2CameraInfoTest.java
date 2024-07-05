@@ -4,6 +4,10 @@
 
 package io.flutter.plugins.camerax;
 
+import static android.hardware.camera2.CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_OFF;
+import static android.hardware.camera2.CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_ON;
+import static android.hardware.camera2.CameraMetadata.CONTROL_VIDEO_STABILIZATION_MODE_PREVIEW_STABILIZATION;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -17,8 +21,11 @@ import android.hardware.camera2.CameraMetadata;
 import androidx.camera.camera2.interop.Camera2CameraInfo;
 import androidx.camera.core.CameraInfo;
 import io.flutter.plugin.common.BinaryMessenger;
+
+import java.util.List;
 import java.util.Objects;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -72,24 +79,65 @@ public class Camera2CameraInfoTest {
   @Test
   public void getSupportedHardwareLevel_returnsExpectedLevel() {
     final Camera2CameraInfoHostApiImpl hostApi =
-        new Camera2CameraInfoHostApiImpl(mock(BinaryMessenger.class), testInstanceManager);
+            new Camera2CameraInfoHostApiImpl(mock(BinaryMessenger.class), testInstanceManager);
     final long camera2CameraInfoIdentifier = 3;
     final int expectedHardwareLevel = CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_FULL;
 
     testInstanceManager.addDartCreatedInstance(mockCamera2CameraInfo, camera2CameraInfoIdentifier);
     when(mockCamera2CameraInfo.getCameraCharacteristic(
             CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL))
-        .thenReturn(expectedHardwareLevel);
+            .thenReturn(expectedHardwareLevel);
 
     assertEquals(
-        expectedHardwareLevel,
-        hostApi.getSupportedHardwareLevel(camera2CameraInfoIdentifier).intValue());
+            expectedHardwareLevel,
+            hostApi.getSupportedHardwareLevel(camera2CameraInfoIdentifier).intValue());
   }
+
+  @Test
+  public void getAvailableVideoStabilizationModes_returnsNone() {
+    final Camera2CameraInfoHostApiImpl hostApi =
+            new Camera2CameraInfoHostApiImpl(mock(BinaryMessenger.class), testInstanceManager);
+    final long camera2CameraInfoIdentifier = 3;
+
+    testInstanceManager.addDartCreatedInstance(mockCamera2CameraInfo, camera2CameraInfoIdentifier);
+    when(mockCamera2CameraInfo.getCameraCharacteristic(
+            CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES))
+            .thenReturn(new int[] {});
+
+    List<Long> returned = hostApi.getAvailableVideoStabilizationModes(camera2CameraInfoIdentifier);
+    assertEquals(0, returned.size());
+  }
+
+  @Test
+  public void getAvailableVideoStabilizationModes_returnsAll() {
+    // arrange
+    final Camera2CameraInfoHostApiImpl hostApi =
+            new Camera2CameraInfoHostApiImpl(mock(BinaryMessenger.class), testInstanceManager);
+    final long camera2CameraInfoIdentifier = 3;
+
+    int[] expected = new int[] {
+            CONTROL_VIDEO_STABILIZATION_MODE_OFF,
+            CONTROL_VIDEO_STABILIZATION_MODE_ON,
+            CONTROL_VIDEO_STABILIZATION_MODE_PREVIEW_STABILIZATION,
+    };
+
+    testInstanceManager.addDartCreatedInstance(mockCamera2CameraInfo, camera2CameraInfoIdentifier);
+    when(mockCamera2CameraInfo.getCameraCharacteristic(
+            CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES))
+            .thenReturn(expected);
+
+    // act
+    int[] returned =  hostApi.getAvailableVideoStabilizationModes(camera2CameraInfoIdentifier).stream().mapToInt(value -> value.intValue()).toArray();
+
+    // assert
+    assertArrayEquals(expected, returned);
+  }
+
 
   @Test
   public void getCameraId_returnsExpectedId() {
     final Camera2CameraInfoHostApiImpl hostApi =
-        new Camera2CameraInfoHostApiImpl(mock(BinaryMessenger.class), testInstanceManager);
+            new Camera2CameraInfoHostApiImpl(mock(BinaryMessenger.class), testInstanceManager);
     final long camera2CameraInfoIdentifier = 13;
     final String expectedCameraId = "testCameraId";
 
@@ -98,6 +146,7 @@ public class Camera2CameraInfoTest {
 
     assertEquals(expectedCameraId, hostApi.getCameraId(camera2CameraInfoIdentifier));
   }
+
 
   @Test
   public void flutterApiCreate_makesCallToCreateInstanceOnDartSide() {
