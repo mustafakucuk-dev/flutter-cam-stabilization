@@ -1,3 +1,7 @@
+## 0.10.0
+
+* Adds video stabilization.
+
 ## 0.9.16
 
 * Converts Dart-to-host communcation to Pigeon.
