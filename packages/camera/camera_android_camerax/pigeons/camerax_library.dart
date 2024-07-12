@@ -261,8 +261,6 @@ abstract class SystemServicesHostApi {
   CameraPermissionsErrorData? requestCameraPermissions(bool enableAudio);
 
   String getTempFilePath(String prefix, String suffix);
-
-  bool isPreviewPreTransformed();
 }
 
 @FlutterApi()
@@ -278,8 +276,6 @@ abstract class DeviceOrientationManagerHostApi {
   void stopListeningForDeviceOrientationChange();
 
   int getDefaultDisplayRotation();
-
-  String getUiOrientation();
 }
 
 @FlutterApi()

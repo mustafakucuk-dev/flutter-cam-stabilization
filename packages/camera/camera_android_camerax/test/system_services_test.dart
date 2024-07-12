@@ -85,8 +85,4 @@ void main() {
       verify(mockApi.getTempFilePath(testPrefix, testSuffix));
     });
   });
-
-  test('isPreviewPreTransformed returns expected answer', () async {
-    expect(await SystemServices.isPreviewPreTransformed(), isTrue);
-  });
 }

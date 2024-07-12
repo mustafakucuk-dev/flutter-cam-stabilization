@@ -4,8 +4,6 @@
 
 import 'dart:ui' show Size;
 
-import 'package:flutter/services.dart' show DeviceOrientation;
-
 import 'analyzer.dart';
 import 'aspect_ratio_strategy.dart';
 import 'camera2_camera_control.dart';
@@ -68,8 +66,6 @@ class CameraXProxy {
     this.createResolutionFilterWithOnePreferredSize =
         _createAttachedResolutionFilterWithOnePreferredSize,
     this.getCamera2CameraInfo = _getCamera2CameraInfo,
-    this.getUiOrientation = _getUiOrientation,
-    this.getSensorOrientation = _getSensorOrientation,
   });
 
   /// Returns a [ProcessCameraProvider] instance.
@@ -192,13 +188,6 @@ class CameraXProxy {
   /// Gets [Camera2CameraInfo] instance from [cameraInfo].
   Future<Camera2CameraInfo> Function(CameraInfo cameraInfo)
       getCamera2CameraInfo;
-
-  /// Gets current UI orientation based on device orientation and rotation.
-  Future<DeviceOrientation> Function() getUiOrientation;
-
-  /// Gets camera sensor orientation from [camera2CameraInfo].
-  Future<int> Function(Camera2CameraInfo camera2CameraInfo)
-      getSensorOrientation;
 
   static Future<ProcessCameraProvider> _getProcessCameraProvider() {
     return ProcessCameraProvider.getInstance();
@@ -345,14 +334,5 @@ class CameraXProxy {
   static Future<Camera2CameraInfo> _getCamera2CameraInfo(
       CameraInfo cameraInfo) async {
     return Camera2CameraInfo.from(cameraInfo);
-  }
-
-  static Future<DeviceOrientation> _getUiOrientation() async {
-    return DeviceOrientationManager.getUiOrientation();
-  }
-
-  static Future<int> _getSensorOrientation(
-      Camera2CameraInfo camera2CameraInfo) async {
-    return camera2CameraInfo.getSensorOrientation();
   }
 }

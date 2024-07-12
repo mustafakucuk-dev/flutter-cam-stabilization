@@ -30,21 +30,23 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
 
   /** Proxy for methods of {@link Camera2CameraInfo}. */
   @VisibleForTesting
-  @OptIn(markerClass = ExperimentalCamera2Interop.class)
   public static class Camera2CameraInfoProxy {
 
     @NonNull
+    @OptIn(markerClass = ExperimentalCamera2Interop.class)
     public Camera2CameraInfo createFrom(@NonNull CameraInfo cameraInfo) {
       return Camera2CameraInfo.from(cameraInfo);
     }
 
     @NonNull
+    @OptIn(markerClass = ExperimentalCamera2Interop.class)
     public Integer getSupportedHardwareLevel(@NonNull Camera2CameraInfo camera2CameraInfo) {
       return camera2CameraInfo.getCameraCharacteristic(
           CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL);
     }
 
     @NonNull
+    @OptIn(markerClass = ExperimentalCamera2Interop.class)
     public String getCameraId(@NonNull Camera2CameraInfo camera2CameraInfo) {
       return camera2CameraInfo.getCameraId();
     }

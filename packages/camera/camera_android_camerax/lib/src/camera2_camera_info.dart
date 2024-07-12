@@ -61,10 +61,6 @@ class Camera2CameraInfo extends JavaObject {
   /// The ID may change based on the internal configuration of the camera to which
   /// this instances pertains.
   Future<String> getCameraId() => _api.getCameraIdFromInstance(this);
-
-  /// Retrieves the orientation of the camera sensor.
-  Future<int> getSensorOrientation() =>
-      _api.getSensorOrientationFromInstance(this);
 }
 
 /// Host API implementation of [Camera2CameraInfo].
@@ -111,11 +107,6 @@ class _Camera2CameraInfoHostApiImpl extends Camera2CameraInfoHostApi {
   Future<String> getCameraIdFromInstance(Camera2CameraInfo instance) {
     final int? identifier = instanceManager.getIdentifier(instance);
     return getCameraId(identifier!);
-  }
-
-  Future<int> getSensorOrientationFromInstance(Camera2CameraInfo instance) {
-    final int? identifier = instanceManager.getIdentifier(instance);
-    return getSensorOrientation(identifier!);
   }
 }
 

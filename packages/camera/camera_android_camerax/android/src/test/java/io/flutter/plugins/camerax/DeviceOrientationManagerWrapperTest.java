@@ -93,16 +93,4 @@ public class DeviceOrientationManagerWrapperTest {
 
     assertEquals(hostApi.getDefaultDisplayRotation(), Long.valueOf(defaultRotation));
   }
-
-  @Test
-  public void getUiOrientation_returnsExpectedOrientation() {
-    final DeviceOrientationManagerHostApiImpl hostApi =
-        new DeviceOrientationManagerHostApiImpl(mockBinaryMessenger, mockInstanceManager);
-    final DeviceOrientation uiOrientation = DeviceOrientation.LANDSCAPE_LEFT;
-
-    hostApi.deviceOrientationManager = mockDeviceOrientationManager;
-    when(mockDeviceOrientationManager.getUIOrientation()).thenReturn(uiOrientation);
-
-    assertEquals(hostApi.getUiOrientation(), uiOrientation.toString());
-  }
 }

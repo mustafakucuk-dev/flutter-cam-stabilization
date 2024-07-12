@@ -95,8 +95,7 @@ public class DeviceOrientationManagerHostApiImpl implements DeviceOrientationMan
    * for instance for more information on how this default value is used.
    */
   @Override
-  @NonNull
-  public Long getDefaultDisplayRotation() {
+  public @NonNull Long getDefaultDisplayRotation() {
     int defaultRotation;
     try {
       defaultRotation = deviceOrientationManager.getDefaultRotation();
@@ -106,12 +105,5 @@ public class DeviceOrientationManagerHostApiImpl implements DeviceOrientationMan
     }
 
     return Long.valueOf(defaultRotation);
-  }
-
-  /** Gets current UI orientation based on the current device orientation and rotation. */
-  @Override
-  @NonNull
-  public String getUiOrientation() {
-    return serializeDeviceOrientation(deviceOrientationManager.getUIOrientation());
   }
 }
