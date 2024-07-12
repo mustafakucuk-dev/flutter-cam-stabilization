@@ -1,3 +1,7 @@
+## 0.10.9+9
+
+* Updates camera_platform_interface lib to 2.9.0.
+
 ## 0.10.9+8
 
 * Removes unused code related to `maxVideoDuration`.

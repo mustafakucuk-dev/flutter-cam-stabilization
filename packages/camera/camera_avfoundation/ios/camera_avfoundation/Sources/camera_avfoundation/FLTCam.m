@@ -1199,6 +1199,64 @@ NSString *const errorMethod = @"error";
   completion(nil);
 }
 
+- (void)setVideoStabilizationMode:(FCPPlatformVideoStabilizationMode)mode
+                   withCompletion:(void (^)(FlutterError *_Nullable))completion {
+  AVCaptureVideoStabilizationMode avMode = getAvCaptureVideoStabilizationMode(mode);
+  bool isSupported = [self isVideoStabilizationAvModeSupported:avMode];
+
+  if (!isSupported) {
+    completion([FlutterError errorWithCode:@"VIDEO_STABILIIZATION_ERROR"
+                                   message:@"Unavailable video stabilization mode."
+                                   details:nil]);
+    return;
+  }
+
+  AVCaptureConnection *connection = [_captureVideoOutput connectionWithMediaType:AVMediaTypeVideo];
+
+  connection.preferredVideoStabilizationMode = avMode;
+
+  completion(nil);
+}
+
+- (bool)isVideoStabilizationModeSupported:(FCPPlatformVideoStabilizationMode)mode {
+  AVCaptureVideoStabilizationMode avMode = getAvCaptureVideoStabilizationMode(mode);
+
+  return [self isVideoStabilizationAvModeSupported:avMode];
+}
+
+- (bool)isVideoStabilizationAvModeSupported:(AVCaptureVideoStabilizationMode)avMode {
+  AVCaptureDeviceFormat *format = _captureDevice.activeFormat;
+  if (format == nil) {
+    return false;
+  }
+
+  bool isSupported = [format isVideoStabilizationModeSupported:avMode];
+  return isSupported;
+}
+
+AVCaptureVideoStabilizationMode getAvCaptureVideoStabilizationMode(
+    FCPPlatformVideoStabilizationMode videoStabilizationMode) {
+  switch (videoStabilizationMode) {
+    case FCPPlatformVideoStabilizationModeOff:
+      return AVCaptureVideoStabilizationModeOff;
+    case FCPPlatformVideoStabilizationModeStandard:
+      return AVCaptureVideoStabilizationModeStandard;
+
+    case FCPPlatformVideoStabilizationModeCinematic:
+      return AVCaptureVideoStabilizationModeCinematic;
+
+    case FCPPlatformVideoStabilizationModeCinematicExtended:
+      if (@available(iOS 13.0, *)) {
+        return AVCaptureVideoStabilizationModeCinematicExtended;
+      } else {
+        return AVCaptureVideoStabilizationModeCinematic;
+      }
+
+    default:
+      return AVCaptureVideoStabilizationModeOff;
+  }
+}
+
 - (CGFloat)minimumAvailableZoomFactor {
   return _captureDevice.minAvailableVideoZoomFactor;
 }
