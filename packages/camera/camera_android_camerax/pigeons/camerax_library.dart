@@ -172,6 +172,7 @@ class MeteringPointInfo {
 /// interoperability with Camera2.
 enum CaptureRequestKeySupportedType {
   controlAeLock,
+  controlVideoStabilizationMode,
 }
 
 @HostApi(dartHostTestHandler: 'TestInstanceManagerHostApi')
@@ -562,6 +563,10 @@ abstract class Camera2CameraInfoHostApi {
   int getSupportedHardwareLevel(int identifier);
 
   String getCameraId(int identifier);
+
+  int getSensorOrientation(int identifier);
+
+  List<int> getAvailableVideoStabilizationModes(int identifier);
 }
 
 @FlutterApi()

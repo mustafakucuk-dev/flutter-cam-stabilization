@@ -1,3 +1,27 @@
+## 0.10.9+9
+
+* Updates camera_platform_interface lib to 2.9.0.
+
+## 0.10.9+8
+
+* Removes unused code related to `maxVideoDuration`.
+
+## 0.10.9+7
+
+* Updates Android Gradle plugin to 8.5.0.
+
+## 0.10.9+6
+
+* Reverts changes to support Impeller.
+
+## 0.10.9+5
+
+* Updates annotations lib to 1.8.0.
+
+## 0.10.9+4
+
+* [Supports Impeller](https://docs.flutter.dev/release/breaking-changes/android-surface-plugins).
+
 ## 0.10.9+3
 
 * Updates minimum supported SDK version to Flutter 3.22/Dart 3.4.
