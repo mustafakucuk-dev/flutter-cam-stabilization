@@ -4,7 +4,6 @@
 
 package io.flutter.plugins.camerax;
 
-import android.content.Context;
 import android.hardware.camera2.CameraCharacteristics;
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
@@ -14,6 +13,8 @@ import androidx.camera.camera2.interop.ExperimentalCamera2Interop;
 import androidx.camera.core.CameraInfo;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugins.camerax.GeneratedCameraXLibrary.Camera2CameraInfoHostApi;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -53,6 +54,15 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
       return Long.valueOf(
           camera2CameraInfo.getCameraCharacteristic(CameraCharacteristics.SENSOR_ORIENTATION));
     }
+
+    @NonNull
+    @OptIn(markerClass = ExperimentalCamera2Interop.class)
+    public int[] getAvailableVideoStabilizationModes(@NonNull Camera2CameraInfo camera2CameraInfo) {
+      int[] modes =
+          camera2CameraInfo.getCameraCharacteristic(
+              CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES);
+      return modes == null ? new int[] {} : modes;
+    }
   }
 
   /**
@@ -60,7 +70,6 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
    *
    * @param binaryMessenger used to communicate with Dart over asynchronous messages
    * @param instanceManager maintains instances stored to communicate with attached Dart objects
-   * @param context {@link Context} used to retrieve {@code Executor}
    */
   public Camera2CameraInfoHostApiImpl(
       @NonNull BinaryMessenger binaryMessenger, @NonNull InstanceManager instanceManager) {
@@ -86,6 +95,7 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
 
   @Override
   @NonNull
+  @OptIn(markerClass = androidx.camera.camera2.interop.ExperimentalCamera2Interop.class)
   public Long createFrom(@NonNull Long cameraInfoIdentifier) {
     final CameraInfo cameraInfo =
         Objects.requireNonNull(instanceManager.getInstance(cameraInfoIdentifier));
@@ -115,6 +125,19 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
     return proxy.getSensorOrientation(getCamera2CameraInfoInstance(identifier));
   }
 
+  @NonNull
+  @Override
+  public List<Long> getAvailableVideoStabilizationModes(@NonNull Long identifier) {
+
+    int[] lst = proxy.getAvailableVideoStabilizationModes(getCamera2CameraInfoInstance(identifier));
+    List<Long> ret = new ArrayList<Long>(lst.length);
+    for (int i : lst) {
+      ret.add((long) i);
+    }
+    return ret;
+  }
+
+  @OptIn(markerClass = androidx.camera.camera2.interop.ExperimentalCamera2Interop.class)
   private Camera2CameraInfo getCamera2CameraInfoInstance(@NonNull Long identifier) {
     return Objects.requireNonNull(instanceManager.getInstance(identifier));
   }

@@ -1199,6 +1199,53 @@ NSString *const errorMethod = @"error";
   completion(nil);
 }
 
+- (void)setVideoStabilizationMode:(FCPPlatformVideoStabilizationMode)mode
+                   withCompletion:(void (^)(FlutterError *_Nullable))completion {
+  AVCaptureVideoStabilizationMode stabilizationMode = getAvCaptureVideoStabilizationMode(mode);
+
+  if (![_captureDevice.activeFormat isVideoStabilizationModeSupported:stabilizationMode]) {
+    completion([FlutterError errorWithCode:@"VIDEO_STABILIIZATION_ERROR"
+                                   message:@"Unavailable video stabilization mode."
+                                   details:nil]);
+    return;
+  }
+
+  AVCaptureConnection *connection = [_captureVideoOutput connectionWithMediaType:AVMediaTypeVideo];
+
+  connection.preferredVideoStabilizationMode = stabilizationMode;
+
+  completion(nil);
+}
+
+- (BOOL)isVideoStabilizationModeSupported:(FCPPlatformVideoStabilizationMode)mode {
+  AVCaptureVideoStabilizationMode stabilizationMode = getAvCaptureVideoStabilizationMode(mode);
+  return [_captureDevice.activeFormat isVideoStabilizationModeSupported:stabilizationMode];
+}
+
+
+AVCaptureVideoStabilizationMode getAvCaptureVideoStabilizationMode(
+    FCPPlatformVideoStabilizationMode videoStabilizationMode) {
+  switch (videoStabilizationMode) {
+    case FCPPlatformVideoStabilizationModeOff:
+      return AVCaptureVideoStabilizationModeOff;
+    case FCPPlatformVideoStabilizationModeStandard:
+      return AVCaptureVideoStabilizationModeStandard;
+
+    case FCPPlatformVideoStabilizationModeCinematic:
+      return AVCaptureVideoStabilizationModeCinematic;
+
+    case FCPPlatformVideoStabilizationModeCinematicExtended:
+      if (@available(iOS 13.0, *)) {
+        return AVCaptureVideoStabilizationModeCinematicExtended;
+      } else {
+        return AVCaptureVideoStabilizationModeCinematic;
+      }
+
+    default:
+      return AVCaptureVideoStabilizationModeOff;
+  }
+}
+
 - (CGFloat)minimumAvailableZoomFactor {
   return _captureDevice.minAvailableVideoZoomFactor;
 }
