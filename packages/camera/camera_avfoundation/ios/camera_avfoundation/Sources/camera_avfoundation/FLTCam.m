@@ -1222,30 +1222,6 @@ NSString *const errorMethod = @"error";
   return [_captureDevice.activeFormat isVideoStabilizationModeSupported:stabilizationMode];
 }
 
-
-AVCaptureVideoStabilizationMode getAvCaptureVideoStabilizationMode(
-    FCPPlatformVideoStabilizationMode videoStabilizationMode) {
-  switch (videoStabilizationMode) {
-    case FCPPlatformVideoStabilizationModeOff:
-      return AVCaptureVideoStabilizationModeOff;
-    case FCPPlatformVideoStabilizationModeStandard:
-      return AVCaptureVideoStabilizationModeStandard;
-
-    case FCPPlatformVideoStabilizationModeCinematic:
-      return AVCaptureVideoStabilizationModeCinematic;
-
-    case FCPPlatformVideoStabilizationModeCinematicExtended:
-      if (@available(iOS 13.0, *)) {
-        return AVCaptureVideoStabilizationModeCinematicExtended;
-      } else {
-        return AVCaptureVideoStabilizationModeCinematic;
-      }
-
-    default:
-      return AVCaptureVideoStabilizationModeOff;
-  }
-}
-
 - (CGFloat)minimumAvailableZoomFactor {
   return _captureDevice.minAvailableVideoZoomFactor;
 }
