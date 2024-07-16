@@ -100,17 +100,6 @@ class _CameraInfoHostApiImpl extends CameraInfoHostApi {
     return instanceManager.getInstanceWithWeakReference<LiveData<ZoomState>>(
         zoomStateIdentifier)!;
   }
-
-  // /// Returns a value indicating whether the given video
-  // /// stabilization mode is supported for [CameraInfo] instance.
-  // Future<bool?> isVideoStabilizationModeSupportedFromInstance(
-  //     CameraInfo instance, VideoStabilizationMode mode) async {
-  //   final int identifier = instanceManager.getIdentifier(instance)!;
-
-  //   final bool? result =
-  //       await isVideoStabilizationModeSupported(identifier, mode.index);
-  //   return result;
-  // }
 }
 
 /// Flutter API implementation of [CameraInfo].
