@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:flutter/services.dart' show BinaryMessenger;
 import 'package:meta/meta.dart' show immutable;
 
@@ -48,13 +49,50 @@ class Camera2CameraInfo extends JavaObject {
   Future<int> getSupportedHardwareLevel() =>
       _api.getSupportedHardwareLevelFromInstance(this);
 
-  /// Retrieves the value of `CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES`
-  /// for the device to which this instance pertains to.
+  /// Retrieves de list of available common platform video stabilization modes
+  /// the device to which this instance pertains to supports.
+  ///
+  /// Works by retrieving the value of `CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES`
+  /// and mapping each of those values to the corresponding common platform
+  /// video stabilization mode.
   ///
   /// See https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics#CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES
   /// for more information.
-  Future<List<int>> getAvailableVideoStabilizationModes() =>
-      _api.getAvailableVideoStabilizationModesFromInstance(this);
+  Future<List<VideoStabilizationMode>>
+      getAvailableVideoStabilizationModes() async {
+    final List<int> controlModes =
+        await _api.getAvailableVideoStabilizationModesFromInstance(this);
+
+    final List<VideoStabilizationMode> modes = <VideoStabilizationMode>[
+      for (final int controlMode in controlModes)
+        if (controlMode == 0)
+          VideoStabilizationMode.off
+        else if (controlMode == 1)
+          VideoStabilizationMode.on
+        else if (controlMode == 2)
+          VideoStabilizationMode.standard
+    ];
+    return modes;
+  }
+
+  /// Maps the common platform VideoStabilizationMode
+  /// to the Android specific control video stabilization mode
+  static int getControlVideoStabilizationMode(VideoStabilizationMode mode) {
+    final int controlMode = switch (mode) {
+      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_OFF
+      VideoStabilizationMode.off => 0,
+      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_ON
+      VideoStabilizationMode.on => 1,
+      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_PREVIEW_STABILIZATION
+      VideoStabilizationMode.standard => 2,
+
+      // TODO(ruicraveiro): add to future possible error codes documentation
+      // https://github.com/flutter/flutter/issues/69298
+      _ => throw CameraException(
+          'VIDEO_STABILIIZATION_ERROR', 'Unavailable video stabilization mode.')
+    };
+    return controlMode;
+  }
 
   /// Gets the camera ID.
   ///
