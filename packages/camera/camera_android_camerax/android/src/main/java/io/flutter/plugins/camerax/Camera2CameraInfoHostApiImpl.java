@@ -23,6 +23,7 @@ import java.util.Objects;
  * <p>This class handles instantiating and adding native object instances that are attached to a
  * Dart instance or handle method calls on the associated native class or an instance of the class.
  */
+@OptIn(markerClass = ExperimentalCamera2Interop.class)
 public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
   private final BinaryMessenger binaryMessenger;
   private final InstanceManager instanceManager;
@@ -30,7 +31,6 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
 
   /** Proxy for methods of {@link Camera2CameraInfo}. */
   @VisibleForTesting
-  @OptIn(markerClass = ExperimentalCamera2Interop.class)
   public static class Camera2CameraInfoProxy {
 
     @NonNull
@@ -56,7 +56,6 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
     }
 
     @NonNull
-    @OptIn(markerClass = ExperimentalCamera2Interop.class)
     public int[] getAvailableVideoStabilizationModes(@NonNull Camera2CameraInfo camera2CameraInfo) {
       int[] modes =
           camera2CameraInfo.getCameraCharacteristic(
@@ -95,7 +94,6 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
 
   @Override
   @NonNull
-  @OptIn(markerClass = androidx.camera.camera2.interop.ExperimentalCamera2Interop.class)
   public Long createFrom(@NonNull Long cameraInfoIdentifier) {
     final CameraInfo cameraInfo =
         Objects.requireNonNull(instanceManager.getInstance(cameraInfoIdentifier));
@@ -137,7 +135,6 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
     return ret;
   }
 
-  @OptIn(markerClass = androidx.camera.camera2.interop.ExperimentalCamera2Interop.class)
   private Camera2CameraInfo getCamera2CameraInfoInstance(@NonNull Long identifier) {
     return Objects.requireNonNull(instanceManager.getInstance(identifier));
   }
