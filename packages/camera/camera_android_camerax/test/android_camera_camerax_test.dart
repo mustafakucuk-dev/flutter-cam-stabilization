@@ -2336,7 +2336,7 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <int>[0];
+        return <VideoStabilizationMode>[VideoStabilizationMode.off];
       },
     );
 
@@ -2389,7 +2389,7 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <int>[0];
+        return <VideoStabilizationMode>[VideoStabilizationMode.off];
       },
     );
 
@@ -2426,7 +2426,11 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <int>[0, 1, 2];
+        return <VideoStabilizationMode>[
+          VideoStabilizationMode.off,
+          VideoStabilizationMode.on,
+          VideoStabilizationMode.standard,
+        ];
       },
     );
 
@@ -2466,7 +2470,7 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <int>[];
+        return <VideoStabilizationMode>[];
       },
     );
 
@@ -2501,10 +2505,15 @@ void main() {
     camera.camera = MockCamera();
     camera.cameraInfo = mockCameraInfo;
 
+    final List<VideoStabilizationMode> expectedModes = <VideoStabilizationMode>[
+      VideoStabilizationMode.off,
+      VideoStabilizationMode.on,
+      VideoStabilizationMode.standard,
+    ];
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <int>[0, 1, 2];
+        return expectedModes;
       },
     );
 
@@ -2523,13 +2532,7 @@ void main() {
     final Iterable<VideoStabilizationMode> modes =
         await camera.getVideoStabilizationSupportedModes(cameraId);
 
-    expect(
-        modes,
-        orderedEquals(<VideoStabilizationMode>[
-          VideoStabilizationMode.off,
-          VideoStabilizationMode.on,
-          VideoStabilizationMode.standard,
-        ]));
+    expect(modes, orderedEquals(expectedModes));
   });
 
   test(

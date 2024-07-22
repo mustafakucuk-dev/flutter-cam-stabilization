@@ -7,6 +7,7 @@ import 'package:camera_android_camerax/src/camera_info.dart';
 import 'package:camera_android_camerax/src/camera_metadata.dart';
 import 'package:camera_android_camerax/src/camerax_library.g.dart';
 import 'package:camera_android_camerax/src/instance_manager.dart';
+import 'package:camera_platform_interface/src/types/video_stabilization_mode.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -132,16 +133,15 @@ void main() {
         onCopy: (_) => Camera2CameraInfo.detached(),
       );
 
-      const List<int?> expectedModes = <int?>[];
       when(mockApi.getAvailableVideoStabilizationModes(camera2CameraInfoId))
-          .thenReturn(expectedModes);
+          .thenReturn(<int?>[]);
 
       // Act
-      final List<int?> returnedModes =
+      final List<VideoStabilizationMode> returnedModes =
           await camera2CameraInfo.getAvailableVideoStabilizationModes();
 
       // Assert
-      expect(returnedModes, equals(expectedModes));
+      expect(returnedModes, equals(<VideoStabilizationMode>[]));
       verify(mockApi.getAvailableVideoStabilizationModes(camera2CameraInfoId));
     });
 
@@ -167,16 +167,21 @@ void main() {
         onCopy: (_) => Camera2CameraInfo.detached(),
       );
 
-      const List<int?> expectedModes = <int?>[0, 1, 2];
       when(mockApi.getAvailableVideoStabilizationModes(camera2CameraInfoId))
-          .thenReturn(expectedModes);
+          .thenReturn(<int?>[0, 1, 2]);
 
       // Act
-      final List<int?> returnedModes =
+      final List<VideoStabilizationMode> returnedModes =
           await camera2CameraInfo.getAvailableVideoStabilizationModes();
 
       // Assert
-      expect(returnedModes, equals(expectedModes));
+      expect(
+          returnedModes,
+          equals(<VideoStabilizationMode>[
+            VideoStabilizationMode.off,
+            VideoStabilizationMode.on,
+            VideoStabilizationMode.standard,
+          ]));
       verify(mockApi.getAvailableVideoStabilizationModes(camera2CameraInfoId));
     });
 
