@@ -2,6 +2,10 @@
 
 * Adds video stabilization.
 
+## 0.6.7+2
+
+* Updates lint checks to ignore NewerVersionAvailable.
+
 ## 0.6.7+1
 
 * Updates README to remove references to `maxVideoDuration`, as it was never
