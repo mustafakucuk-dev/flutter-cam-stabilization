@@ -816,6 +816,8 @@ class AndroidCameraCameraX extends CameraPlatform {
     await cameraControl.setZoomRatio(zoom);
   }
 
+  /// Gets a list of video stabilization modes that are supported for the
+  /// selected camera.
   @override
   Future<Iterable<VideoStabilizationMode>> getVideoStabilizationSupportedModes(
       int cameraId) async {
@@ -826,8 +828,24 @@ class AndroidCameraCameraX extends CameraPlatform {
     final Camera2CameraInfo cam2Info =
         await proxy.getCamera2CameraInfo(camInfo);
 
-    final List<VideoStabilizationMode> modes =
+    final List<int> controlModes =
         await cam2Info.getAvailableVideoStabilizationModes();
+
+    /// if new modes need to be supported, the opposite of this mapping
+    /// code is in [_getControlVideoStabilizationMode(...)] in this class,
+    /// so don't forget to review that method as well.
+
+    final List<VideoStabilizationMode> modes = <VideoStabilizationMode>[
+      for (final int controlMode in controlModes)
+        if (controlMode == CameraMetadata.controlVideoStabilizationModeOff)
+          VideoStabilizationMode.off
+        else if (controlMode == CameraMetadata.controlVideoStabilizationModeOn)
+          VideoStabilizationMode.on
+        else if (controlMode ==
+            CameraMetadata.controlVideoStabilizationModePreviewStabilization)
+          VideoStabilizationMode.standard
+    ];
+
     return modes;
   }
 
@@ -845,8 +863,7 @@ class AndroidCameraCameraX extends CameraPlatform {
           'Unavailable video stabilization mode.');
     }
 
-    final int controlMode =
-        Camera2CameraInfo.getControlVideoStabilizationMode(mode);
+    final int controlMode = _getControlVideoStabilizationMode(mode);
 
     final CaptureRequestOptions captureRequestOptions = proxy
         .createCaptureRequestOptions(<(
@@ -862,6 +879,32 @@ class AndroidCameraCameraX extends CameraPlatform {
     final Camera2CameraControl camera2Control =
         proxy.getCamera2CameraControl(cameraControl);
     await camera2Control.addCaptureRequestOptions(captureRequestOptions);
+  }
+
+  /// Maps the common platform VideoStabilizationMode
+  /// to the Android specific control video stabilization mode
+  static int _getControlVideoStabilizationMode(VideoStabilizationMode mode) {
+    // if new modes need to be supported, the opposite of this mapping
+    // code is in [getVideoStabilizationSupportedModes(...)] in this class,
+    // so don't forget to review that method as well.
+
+    final int controlMode = switch (mode) {
+      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_OFF
+      VideoStabilizationMode.off =>
+        CameraMetadata.controlVideoStabilizationModeOff,
+      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_ON
+      VideoStabilizationMode.on =>
+        CameraMetadata.controlVideoStabilizationModeOn,
+      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_PREVIEW_STABILIZATION
+      VideoStabilizationMode.standard =>
+        CameraMetadata.controlVideoStabilizationModePreviewStabilization,
+
+      // TODO(ruicraveiro): add to future possible error codes documentation
+      // https://github.com/flutter/flutter/issues/69298
+      _ => throw CameraException(
+          'VIDEO_STABILIIZATION_ERROR', 'Unavailable video stabilization mode.')
+    };
+    return controlMode;
   }
 
   /// The ui orientation changed.

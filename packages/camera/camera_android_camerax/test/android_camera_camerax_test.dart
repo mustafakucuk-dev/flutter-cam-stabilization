@@ -2336,7 +2336,7 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <VideoStabilizationMode>[VideoStabilizationMode.off];
+        return <int>[0];
       },
     );
 
@@ -2389,7 +2389,7 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <VideoStabilizationMode>[VideoStabilizationMode.off];
+        return <int>[0];
       },
     );
 
@@ -2426,11 +2426,7 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <VideoStabilizationMode>[
-          VideoStabilizationMode.off,
-          VideoStabilizationMode.on,
-          VideoStabilizationMode.standard,
-        ];
+        return <int>[0, 1, 2];
       },
     );
 
@@ -2470,7 +2466,7 @@ void main() {
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return <VideoStabilizationMode>[];
+        return <int>[];
       },
     );
 
@@ -2505,15 +2501,10 @@ void main() {
     camera.camera = MockCamera();
     camera.cameraInfo = mockCameraInfo;
 
-    final List<VideoStabilizationMode> expectedModes = <VideoStabilizationMode>[
-      VideoStabilizationMode.off,
-      VideoStabilizationMode.on,
-      VideoStabilizationMode.standard,
-    ];
     when(mockCamera2CameraInfo.getAvailableVideoStabilizationModes())
         .thenAnswer(
       (_) async {
-        return expectedModes;
+        return <int>[0, 1, 2];
       },
     );
 
@@ -2532,7 +2523,13 @@ void main() {
     final Iterable<VideoStabilizationMode> modes =
         await camera.getVideoStabilizationSupportedModes(cameraId);
 
-    expect(modes, orderedEquals(expectedModes));
+    expect(
+        modes,
+        orderedEquals(<VideoStabilizationMode>[
+          VideoStabilizationMode.off,
+          VideoStabilizationMode.on,
+          VideoStabilizationMode.standard,
+        ]));
   });
 
   test(
