@@ -127,9 +127,9 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
   @Override
   public List<Long> getAvailableVideoStabilizationModes(@NonNull Long identifier) {
 
-    int[] lst = proxy.getAvailableVideoStabilizationModes(getCamera2CameraInfoInstance(identifier));
-    List<Long> ret = new ArrayList<Long>(lst.length);
-    for (int i : lst) {
+    int[] availableModes = proxy.getAvailableVideoStabilizationModes(getCamera2CameraInfoInstance(identifier));
+    List<Long> ret = new ArrayList<Long>(availableModes.length);
+    for (int i : availableModes) {
       ret.add((long) i);
     }
     return ret;
