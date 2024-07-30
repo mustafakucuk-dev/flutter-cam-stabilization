@@ -1,3 +1,7 @@
+## 0.10.9+10
+
+* Updates annotations lib to 1.8.1.
+
 ## 0.10.9+9
 
 * Updates camera_platform_interface lib to 2.9.0.
