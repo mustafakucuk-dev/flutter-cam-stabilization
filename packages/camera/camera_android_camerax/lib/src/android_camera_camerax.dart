@@ -831,7 +831,7 @@ class AndroidCameraCameraX extends CameraPlatform {
     final List<int> controlModes =
         await cam2Info.getAvailableVideoStabilizationModes();
 
-    /// if new modes need to be supported, the opposite of this mapping
+    /// If new modes need to be supported, the opposite of this mapping
     /// code is in [_getControlVideoStabilizationMode(...)] in this class,
     /// so don't forget to review that method as well.
 
