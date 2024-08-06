@@ -1,6 +1,11 @@
-## 0.3.4+1
+## 0.3.5+1
 
 * Updates camera_platform_interface lib to 2.9.0.
+
+## 0.3.5
+
+* Migrates to package:web to support WASM
+* Updates minimum supported SDK version to Flutter 3.19/Dart 3.3.
 
 ## 0.3.4
 
