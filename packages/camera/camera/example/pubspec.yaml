@@ -28,10 +28,6 @@ dev_dependencies:
   integration_test:
     sdk: flutter
 
-dependency_overrides:
-  camera_web:
-    path: ../../camera_web
-
 flutter:
   uses-material-design: true
 
