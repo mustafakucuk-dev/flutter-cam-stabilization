@@ -22,28 +22,15 @@ void main() {
     expect(values[4], VideoStabilizationMode.cinematicExtended);
   });
 
-  test('serializeVideoStabilizationMode() should serialize correctly', () {
-    expect(serializeVideoStabilizationMode(VideoStabilizationMode.off), 'off');
-    expect(serializeVideoStabilizationMode(VideoStabilizationMode.on), 'on');
-    expect(serializeVideoStabilizationMode(VideoStabilizationMode.standard),
-        'standard');
-    expect(serializeVideoStabilizationMode(VideoStabilizationMode.cinematic),
-        'cinematic');
-    expect(
-        serializeVideoStabilizationMode(
-            VideoStabilizationMode.cinematicExtended),
-        'cinematicExtended');
-  });
-
   test('deserializeVideoStabilizationMode() should deserialize correctly', () {
     expect(
-        deserializeVideoStabilizationMode('off'), VideoStabilizationMode.off);
-    expect(deserializeVideoStabilizationMode('on'), VideoStabilizationMode.on);
-    expect(deserializeVideoStabilizationMode('standard'),
+        VideoStabilizationMode.fromString('off'), VideoStabilizationMode.off);
+    expect(VideoStabilizationMode.fromString('on'), VideoStabilizationMode.on);
+    expect(VideoStabilizationMode.fromString('standard'),
         VideoStabilizationMode.standard);
-    expect(deserializeVideoStabilizationMode('cinematic'),
+    expect(VideoStabilizationMode.fromString('cinematic'),
         VideoStabilizationMode.cinematic);
-    expect(deserializeVideoStabilizationMode('cinematicExtended'),
+    expect(VideoStabilizationMode.fromString('cinematicExtended'),
         VideoStabilizationMode.cinematicExtended);
   });
 }

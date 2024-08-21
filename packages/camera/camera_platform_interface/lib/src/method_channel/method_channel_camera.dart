@@ -517,7 +517,7 @@ class MethodChannelCamera extends CameraPlatform {
         return <VideoStabilizationMode>[];
       }
       return modes
-          .map((Object? e) => deserializeVideoStabilizationMode(e! as String));
+          .map((Object? e) => VideoStabilizationMode.fromString(e! as String));
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
@@ -532,7 +532,7 @@ class MethodChannelCamera extends CameraPlatform {
         'setVideoStabilizationMode',
         <String, dynamic>{
           'cameraId': cameraId,
-          'mode': mode.index,
+          'mode': mode.name,
         },
       );
     } on PlatformException catch (e) {

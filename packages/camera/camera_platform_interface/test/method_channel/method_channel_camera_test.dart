@@ -1139,22 +1139,22 @@ void main() {
           isMethodCall('setVideoStabilizationMode',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
-                'mode': VideoStabilizationMode.off.index,
+                'mode': VideoStabilizationMode.off.name,
               }),
           isMethodCall('setVideoStabilizationMode',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
-                'mode': VideoStabilizationMode.standard.index,
+                'mode': VideoStabilizationMode.standard.name,
               }),
           isMethodCall('setVideoStabilizationMode',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
-                'mode': VideoStabilizationMode.cinematic.index,
+                'mode': VideoStabilizationMode.cinematic.name,
               }),
           isMethodCall('setVideoStabilizationMode',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
-                'mode': VideoStabilizationMode.cinematicExtended.index,
+                'mode': VideoStabilizationMode.cinematicExtended.name,
               }),
         ]);
       });
