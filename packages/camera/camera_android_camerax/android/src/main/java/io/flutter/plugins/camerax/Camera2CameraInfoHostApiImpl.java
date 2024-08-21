@@ -92,6 +92,7 @@ public class Camera2CameraInfoHostApiImpl implements Camera2CameraInfoHostApi {
     this.proxy = proxy;
   }
 
+  @OptIn(markerClass = ExperimentalCamera2Interop.class)
   @Override
   @NonNull
   public Long createFrom(@NonNull Long cameraInfoIdentifier) {
