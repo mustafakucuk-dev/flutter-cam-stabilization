@@ -1269,7 +1269,7 @@ void main() {
       ]);
     });
 
-    test('setVideoStabilizationMode() calls $CameraPlatform', () async {
+    test('setVideoStabilizationMode() calls CameraPlatform', () async {
       final CameraController cameraController = CameraController(
           const CameraDescription(
               name: 'cam',
