@@ -279,7 +279,8 @@ abstract class CameraPlatform extends PlatformInterface {
   /// on iOS. Will return an empty list on all other platforms.
   Future<Iterable<VideoStabilizationMode>> getVideoStabilizationSupportedModes(
       int cameraId) async {
-    throw UnimplementedError();
+    throw UnimplementedError(
+        'getVideoStabilizationSupportedModes() is not implemented.');
   }
 
   /// Sets the video stabilization mode for the selected camera.
@@ -292,7 +293,7 @@ abstract class CameraPlatform extends PlatformInterface {
   /// mode is supplied.
   Future<void> setVideoStabilizationMode(
       int cameraId, VideoStabilizationMode mode) async {
-    throw UnimplementedError();
+    throw UnimplementedError('setVideoStabilizationMode() is not implemented.');
   }
 
   /// Pause the active preview on the current frame for the selected camera.
