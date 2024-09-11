@@ -524,13 +524,11 @@ class AVFoundationCamera extends CameraPlatform {
     switch (videoStabilizationMode) {
       case VideoStabilizationMode.off:
         return PlatformVideoStabilizationMode.off;
-      case VideoStabilizationMode.on:
-        return null;
-      case VideoStabilizationMode.standard:
+      case VideoStabilizationMode.level1:
         return PlatformVideoStabilizationMode.standard;
-      case VideoStabilizationMode.cinematic:
+      case VideoStabilizationMode.level2:
         return PlatformVideoStabilizationMode.cinematic;
-      case VideoStabilizationMode.cinematicExtended:
+      case VideoStabilizationMode.level3:
         return PlatformVideoStabilizationMode.cinematicExtended;
     }
     // The enum comes from a different package, which could get a new value at

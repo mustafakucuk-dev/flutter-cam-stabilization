@@ -1078,10 +1078,9 @@ void main() {
           methods: <String, dynamic>{
             'getVideoStabilizationSupportedModes': <String>[
               'off',
-              'on',
-              'standard',
-              'cinematic',
-              'cinematicExtended',
+              'level1',
+              'level2',
+              'level3',
             ],
           },
         );
@@ -1095,10 +1094,9 @@ void main() {
         // Assert
         expect(modes, <VideoStabilizationMode>[
           VideoStabilizationMode.off,
-          VideoStabilizationMode.on,
-          VideoStabilizationMode.standard,
-          VideoStabilizationMode.cinematic,
-          VideoStabilizationMode.cinematicExtended,
+          VideoStabilizationMode.level1,
+          VideoStabilizationMode.level2,
+          VideoStabilizationMode.level3,
         ]);
 
         expect(channel.log, <Matcher>[
@@ -1123,15 +1121,15 @@ void main() {
         );
         await camera.setVideoStabilizationMode(
           cameraId,
-          VideoStabilizationMode.standard,
+          VideoStabilizationMode.level1,
         );
         await camera.setVideoStabilizationMode(
           cameraId,
-          VideoStabilizationMode.cinematic,
+          VideoStabilizationMode.level2,
         );
         await camera.setVideoStabilizationMode(
           cameraId,
-          VideoStabilizationMode.cinematicExtended,
+          VideoStabilizationMode.level3,
         );
 
         // Assert
@@ -1144,17 +1142,17 @@ void main() {
           isMethodCall('setVideoStabilizationMode',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
-                'mode': VideoStabilizationMode.standard.name,
+                'mode': VideoStabilizationMode.level1.name,
               }),
           isMethodCall('setVideoStabilizationMode',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
-                'mode': VideoStabilizationMode.cinematic.name,
+                'mode': VideoStabilizationMode.level2.name,
               }),
           isMethodCall('setVideoStabilizationMode',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
-                'mode': VideoStabilizationMode.cinematicExtended.name,
+                'mode': VideoStabilizationMode.level3.name,
               }),
         ]);
       });

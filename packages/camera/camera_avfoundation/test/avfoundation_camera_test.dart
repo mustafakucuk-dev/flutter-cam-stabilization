@@ -586,24 +586,9 @@ void main() {
           .setVideoStabilizationMode(PlatformVideoStabilizationMode.off));
     });
 
-    test(
-        'Should throw CameraException when off video stabilization mode is set',
-        () async {
-      const String code = 'VIDEO_STABILIIZATION_ERROR';
-      const String message = 'Unavailable video stabilization mode.';
-
-      expect(
-          () => camera.setVideoStabilizationMode(
-              cameraId, VideoStabilizationMode.on),
-          throwsA(isA<CameraException>()
-              .having((CameraException e) => e.code, 'code', code)
-              .having((CameraException e) => e.description, 'description',
-                  message)));
-    });
-
-    test('Should set video stabilization mode to standard', () async {
+    test('Should set video stabilization mode to level1', () async {
       await camera.setVideoStabilizationMode(
-          cameraId, VideoStabilizationMode.standard);
+          cameraId, VideoStabilizationMode.level1);
 
       verify(mockApi
           .setVideoStabilizationMode(PlatformVideoStabilizationMode.standard));
@@ -611,7 +596,7 @@ void main() {
 
     test('Should set video stabilization mode to cinematic', () async {
       await camera.setVideoStabilizationMode(
-          cameraId, VideoStabilizationMode.cinematic);
+          cameraId, VideoStabilizationMode.level2);
 
       verify(mockApi
           .setVideoStabilizationMode(PlatformVideoStabilizationMode.cinematic));
@@ -619,7 +604,7 @@ void main() {
 
     test('Should set video stabilization mode to cinematicExtended', () async {
       await camera.setVideoStabilizationMode(
-          cameraId, VideoStabilizationMode.cinematicExtended);
+          cameraId, VideoStabilizationMode.level3);
 
       verify(mockApi.setVideoStabilizationMode(
           PlatformVideoStabilizationMode.cinematicExtended));
@@ -654,7 +639,7 @@ void main() {
 
       expect(modes, <VideoStabilizationMode>[
         VideoStabilizationMode.off,
-        VideoStabilizationMode.standard,
+        VideoStabilizationMode.level1,
       ]);
     });
 
@@ -667,9 +652,9 @@ void main() {
 
       expect(modes, <VideoStabilizationMode>[
         VideoStabilizationMode.off,
-        VideoStabilizationMode.standard,
-        VideoStabilizationMode.cinematic,
-        VideoStabilizationMode.cinematicExtended,
+        VideoStabilizationMode.level1,
+        VideoStabilizationMode.level2,
+        VideoStabilizationMode.level3,
       ]);
     });
 
@@ -683,7 +668,7 @@ void main() {
 
       expect(
           () => camera.setVideoStabilizationMode(
-              cameraId, VideoStabilizationMode.cinematic),
+              cameraId, VideoStabilizationMode.level2),
           throwsA(isA<CameraException>()
               .having((CameraException e) => e.code, 'code', code)
               .having((CameraException e) => e.description, 'description',

@@ -6,31 +6,29 @@ import 'package:camera_platform_interface/src/types/video_stabilization_mode.dar
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('VideoStabilizationMode should contain 3 options', () {
+  test('VideoStabilizationMode should contain 4 options', () {
     const List<VideoStabilizationMode> values = VideoStabilizationMode.values;
 
-    expect(values.length, 5);
+    expect(values.length, 4);
   });
 
   test('VideoStabilizationMode enum should have items in correct index', () {
     const List<VideoStabilizationMode> values = VideoStabilizationMode.values;
 
     expect(values[0], VideoStabilizationMode.off);
-    expect(values[1], VideoStabilizationMode.on);
-    expect(values[2], VideoStabilizationMode.standard);
-    expect(values[3], VideoStabilizationMode.cinematic);
-    expect(values[4], VideoStabilizationMode.cinematicExtended);
+    expect(values[1], VideoStabilizationMode.level1);
+    expect(values[2], VideoStabilizationMode.level2);
+    expect(values[3], VideoStabilizationMode.level3);
   });
 
   test('deserializeVideoStabilizationMode() should deserialize correctly', () {
     expect(
         VideoStabilizationMode.fromString('off'), VideoStabilizationMode.off);
-    expect(VideoStabilizationMode.fromString('on'), VideoStabilizationMode.on);
-    expect(VideoStabilizationMode.fromString('standard'),
-        VideoStabilizationMode.standard);
-    expect(VideoStabilizationMode.fromString('cinematic'),
-        VideoStabilizationMode.cinematic);
-    expect(VideoStabilizationMode.fromString('cinematicExtended'),
-        VideoStabilizationMode.cinematicExtended);
+    expect(VideoStabilizationMode.fromString('level1'),
+        VideoStabilizationMode.level1);
+    expect(VideoStabilizationMode.fromString('level2'),
+        VideoStabilizationMode.level2);
+    expect(VideoStabilizationMode.fromString('level3'),
+        VideoStabilizationMode.level3);
   });
 }

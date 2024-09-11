@@ -2405,7 +2405,7 @@ void main() {
 
     expect(
         () => camera.setVideoStabilizationMode(
-            cameraId, VideoStabilizationMode.standard),
+            cameraId, VideoStabilizationMode.level2),
         throwsA(isA<CameraException>()));
   });
 
@@ -2442,11 +2442,11 @@ void main() {
 
     expect(
         () => camera.setVideoStabilizationMode(
-            cameraId, VideoStabilizationMode.cinematic),
+            cameraId, VideoStabilizationMode.level2),
         throwsA(isA<CameraException>()));
     expect(
         () => camera.setVideoStabilizationMode(
-            cameraId, VideoStabilizationMode.cinematicExtended),
+            cameraId, VideoStabilizationMode.level3),
         throwsA(isA<CameraException>()));
   });
 
@@ -2527,8 +2527,7 @@ void main() {
         modes,
         orderedEquals(<VideoStabilizationMode>[
           VideoStabilizationMode.off,
-          VideoStabilizationMode.on,
-          VideoStabilizationMode.standard,
+          VideoStabilizationMode.level1,
         ]));
   });
 

@@ -840,10 +840,7 @@ class AndroidCameraCameraX extends CameraPlatform {
         if (controlMode == CameraMetadata.controlVideoStabilizationModeOff)
           VideoStabilizationMode.off
         else if (controlMode == CameraMetadata.controlVideoStabilizationModeOn)
-          VideoStabilizationMode.on
-        else if (controlMode ==
-            CameraMetadata.controlVideoStabilizationModePreviewStabilization)
-          VideoStabilizationMode.standard
+          VideoStabilizationMode.level1
     ];
 
     return modes;
@@ -893,11 +890,8 @@ class AndroidCameraCameraX extends CameraPlatform {
       VideoStabilizationMode.off =>
         CameraMetadata.controlVideoStabilizationModeOff,
       // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_ON
-      VideoStabilizationMode.on =>
+      VideoStabilizationMode.level1 =>
         CameraMetadata.controlVideoStabilizationModeOn,
-      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_PREVIEW_STABILIZATION
-      VideoStabilizationMode.standard =>
-        CameraMetadata.controlVideoStabilizationModePreviewStabilization,
 
       // TODO(ruicraveiro): add to future possible error codes documentation
       // https://github.com/flutter/flutter/issues/69298

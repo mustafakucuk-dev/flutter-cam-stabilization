@@ -7,31 +7,14 @@ enum VideoStabilizationMode {
   /// Video stabilization is disabled.
   off,
 
-  /// Basic video stabilization is enabled.
-  ///
-  /// Maps to CONTROL_VIDEO_STABILIZATION_MODE_ON on Android
-  /// and throws CameraException on iOS.
-  on,
+  /// Least stabilized video stabilization mode with the least latency.
+  level1,
 
-  /// Standard video stabilization is enabled.
-  ///
-  /// Maps to CONTROL_VIDEO_STABILIZATION_MODE_PREVIEW_STABILIZATION on Android
-  /// (camera_android_camerax) and to AVCaptureVideoStabilizationModeStandard
-  /// on iOS.
-  standard,
+  /// More stabilized video with more latency.
+  level2,
 
-  /// Cinematic video stabilization is enabled.
-  ///
-  /// Maps to CONTROL_VIDEO_STABILIZATION_MODE_PREVIEW_STABILIZATION on Android
-  /// (camera_android_camerax) and to AVCaptureVideoStabilizationModeCinematic
-  /// on iOS.
-  cinematic,
-
-  /// Extended cinematic video stabilization is enabled.
-  ///
-  /// Maps to AVCaptureVideoStabilizationModeCinematicExtended on iOS and
-  /// throws CameraException on Android.
-  cinematicExtended;
+  /// Most stabilized video with the most latency.
+  level3;
 
   /// Returns the video stabilization mode for a given String.
   factory VideoStabilizationMode.fromString(String str) {
