@@ -1,3 +1,11 @@
+## 22.3.0
+
+* Adds support for enums and classes in collections.
+
+## 22.2.0
+
+* [kotlin] Adds implementation for `@ProxyApi`.
+
 ## 22.1.0
 
 * Allows generation of classes that aren't referenced in an API.
