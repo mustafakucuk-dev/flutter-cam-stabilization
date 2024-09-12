@@ -1249,10 +1249,9 @@ void main() {
               .getVideoStabilizationSupportedModes(mockInitializeCamera))
           .thenAnswer((_) async => <VideoStabilizationMode>[
                 VideoStabilizationMode.off,
-                VideoStabilizationMode.on,
-                VideoStabilizationMode.standard,
-                VideoStabilizationMode.cinematic,
-                VideoStabilizationMode.cinematicExtended,
+                VideoStabilizationMode.level1,
+                VideoStabilizationMode.level2,
+                VideoStabilizationMode.level3,
               ]);
 
       // act
@@ -1262,10 +1261,9 @@ void main() {
       // assert
       expect(modes, <VideoStabilizationMode>[
         VideoStabilizationMode.off,
-        VideoStabilizationMode.on,
-        VideoStabilizationMode.standard,
-        VideoStabilizationMode.cinematic,
-        VideoStabilizationMode.cinematicExtended,
+        VideoStabilizationMode.level1,
+        VideoStabilizationMode.level2,
+        VideoStabilizationMode.level3,
       ]);
     });
 
@@ -1298,8 +1296,7 @@ void main() {
       await cameraController.initialize();
 
       when(CameraPlatform.instance.setVideoStabilizationMode(
-              cameraController.cameraId,
-              VideoStabilizationMode.cinematicExtended))
+              cameraController.cameraId, VideoStabilizationMode.level3))
           .thenThrow(
         PlatformException(
           code: 'TEST_ERROR',
@@ -1308,8 +1305,8 @@ void main() {
       );
 
       expect(
-          cameraController.setVideoStabilizationMode(
-              VideoStabilizationMode.cinematicExtended),
+          cameraController
+              .setVideoStabilizationMode(VideoStabilizationMode.level3),
           throwsA(isA<CameraException>().having(
             (CameraException error) => error.description,
             'TEST_ERROR',
