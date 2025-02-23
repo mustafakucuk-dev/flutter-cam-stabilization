@@ -77,57 +77,43 @@ public class PreviewHostApiImpl implements PreviewHostApi {
       @NonNull TextureRegistry.SurfaceProducer surfaceProducer) {
     return new Preview.SurfaceProvider() {
       @Override
-      public void onSurfaceRequested(@NonNull SurfaceRequest request) {
-        // Set callback for surfaceProducer to invalidate Surfaces that it produces when they
-        // get destroyed.
-        surfaceProducer.setCallback(
-            new TextureRegistry.SurfaceProducer.Callback() {
-              @Override
-              public void onSurfaceCreated() {
-                // Do nothing. The Preview.SurfaceProvider will handle this whenever a new
-                // Surface is needed.
-              }
+public void onSurfaceRequested(@NonNull SurfaceRequest request) {
+  // Remove the callback registration since the current TextureRegistry API does not support it.
+  
+  // Set the size for the produced surface.
+  surfaceProducer.setSize(
+      request.getResolution().getWidth(), request.getResolution().getHeight());
+  
+  // Get the surface from the producer.
+  Surface flutterSurface = surfaceProducer.getSurface();
+  
+  // Provide the surface to CameraX.
+  request.provideSurface(
+      flutterSurface,
+      Executors.newSingleThreadExecutor(),
+      (result) -> {
+        // Always release the surface after use.
+        flutterSurface.release();
+        int resultCode = result.getResultCode();
+        switch (resultCode) {
+          case SurfaceRequest.Result.RESULT_REQUEST_CANCELLED:
+          case SurfaceRequest.Result.RESULT_WILL_NOT_PROVIDE_SURFACE:
+          case SurfaceRequest.Result.RESULT_SURFACE_ALREADY_PROVIDED:
+          case SurfaceRequest.Result.RESULT_SURFACE_USED_SUCCESSFULLY:
+            // These codes are handled without further action.
+            break;
+          case SurfaceRequest.Result.RESULT_INVALID_SURFACE:
+          default:
+            // Report the error.
+            SystemServicesFlutterApiImpl systemServicesFlutterApi =
+                cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
+            systemServicesFlutterApi.sendCameraError(
+                getProvideSurfaceErrorDescription(resultCode), reply -> {});
+            break;
+        }
+      });
+}
 
-              @Override
-              public void onSurfaceDestroyed() {
-                // Invalidate the SurfaceRequest so that CameraX knows to to make a new request
-                // for a surface.
-                request.invalidate();
-              }
-            });
-
-        // Provide surface.
-        surfaceProducer.setSize(
-            request.getResolution().getWidth(), request.getResolution().getHeight());
-        Surface flutterSurface = surfaceProducer.getSurface();
-        request.provideSurface(
-            flutterSurface,
-            Executors.newSingleThreadExecutor(),
-            (result) -> {
-              // See
-              // https://developer.android.com/reference/androidx/camera/core/SurfaceRequest.Result
-              // for documentation.
-              // Always attempt a release.
-              flutterSurface.release();
-              int resultCode = result.getResultCode();
-              switch (resultCode) {
-                case SurfaceRequest.Result.RESULT_REQUEST_CANCELLED:
-                case SurfaceRequest.Result.RESULT_WILL_NOT_PROVIDE_SURFACE:
-                case SurfaceRequest.Result.RESULT_SURFACE_ALREADY_PROVIDED:
-                case SurfaceRequest.Result.RESULT_SURFACE_USED_SUCCESSFULLY:
-                  // Only need to release, do nothing.
-                  break;
-                case SurfaceRequest.Result.RESULT_INVALID_SURFACE: // Intentional fall through.
-                default:
-                  // Release and send error.
-                  SystemServicesFlutterApiImpl systemServicesFlutterApi =
-                      cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
-                  systemServicesFlutterApi.sendCameraError(
-                      getProvideSurfaceErrorDescription(resultCode), reply -> {});
-                  break;
-              }
-            });
-      }
     };
   }
 
