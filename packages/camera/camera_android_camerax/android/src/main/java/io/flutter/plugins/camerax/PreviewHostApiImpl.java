@@ -77,42 +77,41 @@ public class PreviewHostApiImpl implements PreviewHostApi {
       @NonNull TextureRegistry.SurfaceProducer surfaceProducer) {
     return new Preview.SurfaceProvider() {
       @Override
-public void onSurfaceRequested(@NonNull SurfaceRequest request) {
-  // Remove the callback registration since the current TextureRegistry API does not support it.
-  
-  // Set the size for the produced surface.
-  surfaceProducer.setSize(
-      request.getResolution().getWidth(), request.getResolution().getHeight());
-  
-  // Get the surface from the producer.
-  Surface flutterSurface = surfaceProducer.getSurface();
-  
-  // Provide the surface to CameraX.
-  request.provideSurface(
-      flutterSurface,
-      Executors.newSingleThreadExecutor(),
-      (result) -> {
-        // Always release the surface after use.
-        flutterSurface.release();
-        int resultCode = result.getResultCode();
-        switch (resultCode) {
-          case SurfaceRequest.Result.RESULT_REQUEST_CANCELLED:
-          case SurfaceRequest.Result.RESULT_WILL_NOT_PROVIDE_SURFACE:
-          case SurfaceRequest.Result.RESULT_SURFACE_ALREADY_PROVIDED:
-          case SurfaceRequest.Result.RESULT_SURFACE_USED_SUCCESSFULLY:
-            // These codes are handled without further action.
-            break;
-          case SurfaceRequest.Result.RESULT_INVALID_SURFACE:
-          default:
-            // Report the error.
-            SystemServicesFlutterApiImpl systemServicesFlutterApi =
-                cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
-            systemServicesFlutterApi.sendCameraError(
-                getProvideSurfaceErrorDescription(resultCode), reply -> {});
-            break;
-        }
-      });
-}
+      public void onSurfaceRequested(@NonNull SurfaceRequest request) {
+        // Set the size for the produced surface.
+        surfaceProducer.setSize(
+            request.getResolution().getWidth(), request.getResolution().getHeight());
+
+        // Get the surface from the producer.
+        Surface flutterSurface = surfaceProducer.getSurface();
+
+        // Provide the surface to CameraX.
+        request.provideSurface(
+            flutterSurface,
+            Executors.newSingleThreadExecutor(),
+            (result) -> {
+              // Always release the surface after use.
+              flutterSurface.release();
+              int resultCode = result.getResultCode();
+              switch (resultCode) {
+                case SurfaceRequest.Result.RESULT_REQUEST_CANCELLED:
+                case SurfaceRequest.Result.RESULT_WILL_NOT_PROVIDE_SURFACE:
+                case SurfaceRequest.Result.RESULT_SURFACE_ALREADY_PROVIDED:
+                case SurfaceRequest.Result.RESULT_SURFACE_USED_SUCCESSFULLY:
+                  // Do nothing further.
+                  break;
+                case SurfaceRequest.Result.RESULT_INVALID_SURFACE:
+                default:
+                  // Report the error.
+                  SystemServicesFlutterApiImpl systemServicesFlutterApi =
+                      cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
+                  systemServicesFlutterApi.sendCameraError(
+                      getProvideSurfaceErrorDescription(resultCode), reply -> {});
+                  break;
+              }
+            });
+      }
+
 
     };
   }
